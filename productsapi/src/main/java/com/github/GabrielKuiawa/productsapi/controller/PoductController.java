@@ -4,6 +4,7 @@ import com.github.GabrielKuiawa.productsapi.model.Product;
 import com.github.GabrielKuiawa.productsapi.repository.ProductRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,6 +42,11 @@ public class PoductController {
         product.setId(id);
         productRepository.save(product);
 
+    }
+
+    @GetMapping
+    public List<Product> search(@RequestParam("name") String name) {
+        return  productRepository.findByName(name);
     }
 
 
