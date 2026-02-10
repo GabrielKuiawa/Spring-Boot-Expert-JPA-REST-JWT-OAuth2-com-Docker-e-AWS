@@ -46,4 +46,15 @@ public class Engine {
     public void setEngineDisplacement(Double engineDisplacement) {
         this.engineDisplacement = engineDisplacement;
     }
+
+    @Override
+    public String toString() {
+        return "Engine{" +
+                "model='" + model + '\'' +
+                ", horsepower=" + horsepower +
+                ", cylinders=" + cylinders +
+                ", engineDisplacement=" + engineDisplacement +
+                ", engineType=" + engineType +
+                '}';
+    }
 }

@@ -43,4 +43,13 @@ public class Car {
     public void setManufacturer(Manufacturer manufacturer) {
         this.manufacturer = manufacturer;
     }
+
+    public CarStatus ignition(Key key) {
+        System.out.println(key.getManufacturer());
+        System.out.println(this.manufacturer);
+        if (key.getManufacturer() != this.manufacturer) {
+            return new CarStatus("It is not possible to start the car with this key.");
+        }
+        return new CarStatus("Car running. Running with engine " + this.engine);
+    }
 }
