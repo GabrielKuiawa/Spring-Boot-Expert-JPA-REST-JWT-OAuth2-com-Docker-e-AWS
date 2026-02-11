@@ -2,13 +2,16 @@ package com.github.GabrielKuiawa.springarchitecture.manufacturer.configuration;
 
 import com.github.GabrielKuiawa.springarchitecture.manufacturer.Engine;
 import com.github.GabrielKuiawa.springarchitecture.manufacturer.EngineType;
+import com.github.GabrielKuiawa.springarchitecture.manufacturer.api.Aspirated;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class manufacturerConfiguration {
 
     @Bean(name = "engineAspirated")
+    @Aspirated
     public Engine engineAspirated() {
         var engine = new Engine();
         engine.setHorsepower(120);
@@ -19,6 +22,7 @@ public class manufacturerConfiguration {
         return engine;
     }
 
+    @Primary
     @Bean(name = "engineEletric")
     public Engine engineEletric() {
         var engine = new Engine();
