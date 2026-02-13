@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_todo")
-public class TodosEntity {
+public class TodoEntity {
 
     @Id
     @Column(name = "id")
@@ -12,7 +12,7 @@ public class TodosEntity {
     private  Integer id;
     @Column(name = "description")
     private  String description;
-    @Column(name = "completed")
+    @Column(name = "fl_completed")
     private  Boolean completed;
 
     public Integer getId() {
