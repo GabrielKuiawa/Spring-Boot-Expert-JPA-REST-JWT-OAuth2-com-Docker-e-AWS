@@ -59,7 +59,7 @@ public class AuthorRepositoryTest {
 
     @Test
     public void deleteTest() {
-        var id = UUID.fromString("d9280a18-453d-48a9-bf52-95866b52e81e");
+        var id = UUID.fromString("3e901748-df1d-46fa-999e-d085c3843bc6");
         var author = repository.findById(id).get();
         repository.delete(author);
     }

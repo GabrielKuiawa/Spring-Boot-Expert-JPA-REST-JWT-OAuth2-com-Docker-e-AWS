@@ -27,14 +27,32 @@ class BookRepositoryTest {
         book.setPrice(BigDecimal.valueOf(200));
         book.setGenre(GenreBook.MISTERIO);
         book.setTitle("Ufoo");
-        book.setPublication_date(LocalDate.of(1967,3,2));
+        book.setPublication_date(LocalDate.of(1967, 3, 2));
 
-        Author author =  authorRepository
+        Author author = authorRepository
                 .findById(UUID.fromString("dbbd0abd-a737-418e-a008-c6ec33ae53dc"))
                 .orElse(null);
 
         book.setAuthor(author);
 
+        repository.save(book);
+    }
+
+    @Test
+    void saveCascadeTest() {
+        Book book = new Book();
+        book.setIsbn("93484");
+        book.setPrice(BigDecimal.valueOf(200));
+        book.setGenre(GenreBook.MISTERIO);
+        book.setTitle("cleber in the viagens");
+        book.setPublication_date(LocalDate.of(1967,3,2));
+
+        Author author = new Author();
+        author.setName("Machado");
+        author.setNationality("Brazilean");
+        author.setBirthDate(LocalDate.of(2000,5,12));
+
+        book.setAuthor(author);
         repository.save(book);
     }
 }
