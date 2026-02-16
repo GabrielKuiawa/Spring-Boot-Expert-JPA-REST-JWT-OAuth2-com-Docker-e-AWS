@@ -1,11 +1,15 @@
 package com.github.GabrielKuiawa.libraryapi.repository;
 
 import com.github.GabrielKuiawa.libraryapi.model.Author;
+import com.github.GabrielKuiawa.libraryapi.model.Book;
+import com.github.GabrielKuiawa.libraryapi.model.GenreBook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,6 +19,9 @@ public class AuthorRepositoryTest {
 
     @Autowired
      AuthorRepository repository;
+
+    @Autowired
+    BookRepository bookRepository;
 
     @Test
     public  void saveTest() {
@@ -59,8 +66,41 @@ public class AuthorRepositoryTest {
 
     @Test
     public void deleteTest() {
-        var id = UUID.fromString("3e901748-df1d-46fa-999e-d085c3843bc6");
+        var id = UUID.fromString("41d6320b-a58d-48f2-9dc5-c024161b6ce8");
         var author = repository.findById(id).get();
         repository.delete(author);
+    }
+
+    @Test
+    void saveAthorWithBookTest() {
+        Author author = new Author();
+        author.setName("janie");
+        author.setNationality("American");
+        author.setBirthDate(LocalDate.of(1875,9,30));
+
+        Book book = new Book();
+        book.setIsbn("93484-34467");
+        book.setPrice(BigDecimal.valueOf(270.86));
+        book.setGenre(GenreBook.BIOGRAFIA);
+        book.setTitle("That's life");
+        book.setPublication_date(LocalDate.of(1997,6,25));
+        book.setAuthor(author);
+
+        Book book2 = new Book();
+        book2.setIsbn("553344-34467");
+        book2.setPrice(BigDecimal.valueOf(243.86));
+        book2.setGenre(GenreBook.ROMANCE);
+        book2.setTitle("That's love");
+        book2.setPublication_date(LocalDate.of(1997,6,25));
+        book2.setAuthor(author);
+
+        author.setBooks(new ArrayList<>());
+        author.getBooks().add(book);
+        author.getBooks().add(book2);
+
+        System.out.println(book);
+        System.out.println(book2);
+        repository.save(author);
+//        bookRepository.saveAll(author.getBooks());
     }
 }
