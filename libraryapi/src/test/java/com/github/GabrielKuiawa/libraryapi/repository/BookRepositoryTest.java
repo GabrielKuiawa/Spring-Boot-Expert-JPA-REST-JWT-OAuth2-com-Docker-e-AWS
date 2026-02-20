@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,7 +60,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    void updateAuthorBook() {
+    void updateAuthorBookTest() {
         UUID id = UUID.fromString("4c95dcb7-d6c5-4f39-b23b-5f2001acda21");
         var bookForUpdate = repository.findById(id).orElse(null);
 
@@ -72,7 +73,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         UUID id = UUID.fromString("4c95dcb7-d6c5-4f39-b23b-5f2001acda21");
         repository.deleteById(id);
     }
@@ -87,5 +88,23 @@ class BookRepositoryTest {
 
         System.out.println("Author: ");
         System.out.println(book.getAuthor().getName());
+    }
+
+    @Test
+    void searchByTitleTest() {
+        List<Book> list = repository.findByTitle("That's life");
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    void searchByIsbnTest() {
+        List<Book> list = repository.findByIsbn("553344-34467");
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    void searchByTitleAndPriceTest() {
+        List<Book> list = repository.findByTitleAndPrice("That's life", BigDecimal.valueOf(20));
+        list.forEach(System.out::println);
     }
 }
