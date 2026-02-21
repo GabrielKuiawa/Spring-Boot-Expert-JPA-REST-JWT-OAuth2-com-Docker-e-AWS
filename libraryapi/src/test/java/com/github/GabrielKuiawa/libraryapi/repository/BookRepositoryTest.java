@@ -30,7 +30,7 @@ class BookRepositoryTest {
         book.setPrice(BigDecimal.valueOf(200));
         book.setGenre(GenreBook.MISTERIO);
         book.setTitle("Ufoo");
-        book.setPublication_date(LocalDate.of(1967, 3, 2));
+        book.setPublicationDate(LocalDate.of(1967, 3, 2));
 
         Author author = authorRepository
                 .findById(UUID.fromString("dbbd0abd-a737-418e-a008-c6ec33ae53dc"))
@@ -48,7 +48,7 @@ class BookRepositoryTest {
         book.setPrice(BigDecimal.valueOf(200));
         book.setGenre(GenreBook.MISTERIO);
         book.setTitle("cleber in the viagens");
-        book.setPublication_date(LocalDate.of(1967,3,2));
+        book.setPublicationDate(LocalDate.of(1967,3,2));
 
         Author author = new Author();
         author.setName("Machado");
@@ -107,4 +107,23 @@ class BookRepositoryTest {
         List<Book> list = repository.findByTitleAndPrice("That's life", BigDecimal.valueOf(20));
         list.forEach(System.out::println);
     }
+
+    @Test
+    void listBooksWithQueryJPQL() {
+        List<Book> result = repository.listAllOrderByTitleAndPrice();
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    void listAuthorsBooks() {
+        List<Author> result = repository.listAuthorsBooks();
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    void listTitlesDistinctBooks() {
+        List<String> result = repository.listNamesDistinctBooks();
+        result.forEach(System.out::println);
+    }
+
 }

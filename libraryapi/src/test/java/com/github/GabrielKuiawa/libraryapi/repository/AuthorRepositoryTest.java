@@ -84,7 +84,7 @@ public class AuthorRepositoryTest {
         book.setPrice(BigDecimal.valueOf(270.86));
         book.setGenre(GenreBook.BIOGRAFIA);
         book.setTitle("That's life");
-        book.setPublication_date(LocalDate.of(1997,6,25));
+        book.setPublicationDate(LocalDate.of(1997,6,25));
         book.setAuthor(author);
 
         Book book2 = new Book();
@@ -92,7 +92,7 @@ public class AuthorRepositoryTest {
         book2.setPrice(BigDecimal.valueOf(243.86));
         book2.setGenre(GenreBook.ROMANCE);
         book2.setTitle("That's love");
-        book2.setPublication_date(LocalDate.of(1997,6,25));
+        book2.setPublicationDate(LocalDate.of(1997,6,25));
         book2.setAuthor(author);
 
         author.setBooks(new ArrayList<>());
