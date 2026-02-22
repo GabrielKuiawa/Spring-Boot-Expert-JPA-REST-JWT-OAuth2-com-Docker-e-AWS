@@ -26,14 +26,14 @@ class BookRepositoryTest {
     @Test
     void saveTest() {
         Book book = new Book();
-        book.setIsbn("344444444");
+        book.setIsbn("553445");
         book.setPrice(BigDecimal.valueOf(200));
-        book.setGenre(GenreBook.MISTERIO);
-        book.setTitle("Ufoo");
-        book.setPublicationDate(LocalDate.of(1967, 3, 2));
+        book.setGenre(GenreBook.CIENCIA);
+        book.setTitle("láaaaaa");
+        book.setPublicationDate(LocalDate.of(1965, 4, 23));
 
         Author author = authorRepository
-                .findById(UUID.fromString("dbbd0abd-a737-418e-a008-c6ec33ae53dc"))
+                .findById(UUID.fromString("6d3aef0b-a85a-4aa1-b808-87a4b1eeaa31"))
                 .orElse(null);
 
         book.setAuthor(author);
@@ -136,6 +136,16 @@ class BookRepositoryTest {
     void listByGenrePositionalParametersQueryParamTest() {
         var result = repository.findByGenrePositionalParameters(GenreBook.ROMANCE,"publicationDate");
         result.forEach(System.out::println);
+    }
+
+    @Test
+    void deleteByGenreTest() {
+        repository.deleteByGenre(GenreBook.CIENCIA);
+    }
+
+    @Test
+    void updatePublicationDateTest() {
+        repository.updatePublicationDate(LocalDate.of(2000,1,1));
     }
 
 }
