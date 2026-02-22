@@ -109,20 +109,32 @@ class BookRepositoryTest {
     }
 
     @Test
-    void listBooksWithQueryJPQL() {
+    void listBooksWithQueryJPQLTest() {
         List<Book> result = repository.listAllOrderByTitleAndPrice();
         result.forEach(System.out::println);
     }
 
     @Test
-    void listAuthorsBooks() {
+    void listAuthorsBooksTest() {
         List<Author> result = repository.listAuthorsBooks();
         result.forEach(System.out::println);
     }
 
     @Test
-    void listTitlesDistinctBooks() {
+    void listTitlesDistinctBooksTest() {
         List<String> result = repository.listNamesDistinctBooks();
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    void listByGenreQueryParamTest() {
+        var result = repository.findByGenre(GenreBook.ROMANCE,"publicationDate");
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    void listByGenrePositionalParametersQueryParamTest() {
+        var result = repository.findByGenrePositionalParameters(GenreBook.ROMANCE,"publicationDate");
         result.forEach(System.out::println);
     }
 

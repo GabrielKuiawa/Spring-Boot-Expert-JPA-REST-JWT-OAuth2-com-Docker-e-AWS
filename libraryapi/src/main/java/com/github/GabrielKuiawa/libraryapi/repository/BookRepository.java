@@ -2,8 +2,10 @@ package com.github.GabrielKuiawa.libraryapi.repository;
 
 import com.github.GabrielKuiawa.libraryapi.model.Author;
 import com.github.GabrielKuiawa.libraryapi.model.Book;
+import com.github.GabrielKuiawa.libraryapi.model.GenreBook;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,4 +41,13 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
 
     @Query( "select distinct b.title from Book as b " )
     List<String> listNamesDistinctBooks();
+
+    @Query(" select b from Book b where  b.genre =:genre order by :orderParam")
+    List<Book> findByGenre(
+            @Param("genre") GenreBook genreBook,
+            @Param("orderParam") String orderParam
+    );
+
+    @Query(" select b from Book b where  b.genre =?1 order by ?2")
+    List<Book> findByGenrePositionalParameters(GenreBook genreBook,String orderParam);
 }
