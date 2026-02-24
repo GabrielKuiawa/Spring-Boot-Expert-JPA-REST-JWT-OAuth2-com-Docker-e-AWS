@@ -22,4 +22,9 @@ public class TransactionalTest {
     void transactionalSimple() {
         service.execute();
     }
+
+    @Test
+    void transactionalStateManages() {
+        service.update();
+    }
 }
