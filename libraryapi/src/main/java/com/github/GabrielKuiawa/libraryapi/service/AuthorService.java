@@ -20,6 +20,12 @@ public class AuthorService {
     public Author save(Author author) {
         return repository.save(author);
     }
+    public void update(Author author) {
+        if (author.getId() == null){
+            throw new IllegalArgumentException("Required ID");
+        }
+        repository.save(author);
+    }
 
     public Optional<Author> getById(UUID id) {
         return  repository.findById(id);
