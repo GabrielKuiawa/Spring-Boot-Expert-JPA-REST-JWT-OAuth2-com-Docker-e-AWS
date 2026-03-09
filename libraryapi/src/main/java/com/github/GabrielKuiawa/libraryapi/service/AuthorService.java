@@ -2,6 +2,7 @@ package com.github.GabrielKuiawa.libraryapi.service;
 
 import com.github.GabrielKuiawa.libraryapi.model.Author;
 import com.github.GabrielKuiawa.libraryapi.repository.AuthorRepository;
+import com.github.GabrielKuiawa.libraryapi.validator.AuthorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,18 +13,23 @@ import java.util.UUID;
 public class AuthorService {
 
     private final AuthorRepository repository;
+    private final AuthorValidator validator;
 
-    public  AuthorService(AuthorRepository repository) {
+    public  AuthorService(AuthorRepository repository, AuthorValidator validator) {
         this.repository = repository;
+        this.validator = validator;
     }
 
     public Author save(Author author) {
+        validator.validate(author);
         return repository.save(author);
     }
+
     public void update(Author author) {
         if (author.getId() == null){
             throw new IllegalArgumentException("Required ID");
         }
+        validator.validate(author);
         repository.save(author);
     }
 

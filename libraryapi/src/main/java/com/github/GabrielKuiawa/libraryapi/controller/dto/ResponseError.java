@@ -11,6 +11,6 @@ public record ResponseError(int status, String message, List<FieldError> errors)
     }
 
     public static ResponseError conflict(String message) {
-        return new ResponseError(HttpStatus.CONTINUE.value(), message, List.of());
+        return new ResponseError(HttpStatus.CONFLICT.value(), message, List.of());
     }
 }
