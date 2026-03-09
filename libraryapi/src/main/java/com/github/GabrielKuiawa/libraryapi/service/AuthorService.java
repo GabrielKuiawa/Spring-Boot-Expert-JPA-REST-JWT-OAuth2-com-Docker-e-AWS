@@ -5,6 +5,7 @@ import com.github.GabrielKuiawa.libraryapi.model.Author;
 import com.github.GabrielKuiawa.libraryapi.repository.AuthorRepository;
 import com.github.GabrielKuiawa.libraryapi.repository.BookRepository;
 import com.github.GabrielKuiawa.libraryapi.validator.AuthorValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,20 +13,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorService {
 
     private final AuthorRepository repository;
     private final AuthorValidator validator;
     private final BookRepository bookRepository;
-
-    public  AuthorService(
-            AuthorRepository repository,
-            AuthorValidator validator,
-            BookRepository bookRepository) {
-        this.repository = repository;
-        this.validator = validator;
-        this.bookRepository = bookRepository;
-    }
 
     public Author save(Author author) {
         validator.validate(author);
