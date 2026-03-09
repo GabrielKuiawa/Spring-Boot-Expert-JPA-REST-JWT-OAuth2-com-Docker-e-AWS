@@ -3,6 +3,7 @@ package com.github.GabrielKuiawa.libraryapi.controller;
 import com.github.GabrielKuiawa.libraryapi.controller.dto.AuthorDTO;
 import com.github.GabrielKuiawa.libraryapi.controller.dto.ResponseError;
 import com.github.GabrielKuiawa.libraryapi.exceptions.DuplicateRegisterException;
+import com.github.GabrielKuiawa.libraryapi.exceptions.OperationNotPermittedException;
 import com.github.GabrielKuiawa.libraryapi.model.Author;
 import com.github.GabrielKuiawa.libraryapi.service.AuthorService;
 import org.springframework.http.ResponseEntity;
@@ -62,16 +63,21 @@ public class AuthorController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete (@PathVariable String id) {
-        var idAuthor = UUID.fromString(id);
-        Optional<Author> authorOptional = service.getById(idAuthor);
+    public ResponseEntity<Object> delete (@PathVariable String id) {
+        try {
+            var idAuthor = UUID.fromString(id);
+            Optional<Author> authorOptional = service.getById(idAuthor);
 
-        if (authorOptional.isEmpty()) {
-            return  ResponseEntity.notFound().build();
+            if (authorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            service.delete(authorOptional.get());
+            return ResponseEntity.noContent().build();
+        } catch (OperationNotPermittedException e) {
+            var errorDTO = ResponseError.defaultResponse(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
         }
-
-        service.delete(authorOptional.get());
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -91,23 +97,28 @@ public class AuthorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> update(
+    public ResponseEntity<Object> update(
             @PathVariable String id, @RequestBody AuthorDTO dto) {
-        var idAuthor = UUID.fromString(id);
-        Optional<Author> authorOptional = service.getById(idAuthor);
+        try {
+            var idAuthor = UUID.fromString(id);
+            Optional<Author> authorOptional = service.getById(idAuthor);
 
-        if (authorOptional.isEmpty()) {
-            return  ResponseEntity.notFound().build();
+            if (authorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            var author = authorOptional.get();
+            author.setName(dto.name());
+            author.setBirthDate(dto.birthDate());
+            author.setNationality(dto.nationality());
+
+            service.update(author);
+
+            return ResponseEntity.noContent().build();
+        } catch (DuplicateRegisterException e) {
+            var errorDTO = ResponseError.conflict(e.getMessage());
+            return ResponseEntity.status(errorDTO.status()).body(errorDTO);
         }
-
-        var author = authorOptional.get();
-        author.setName(dto.name());
-        author.setBirthDate(dto.birthDate());
-        author.setNationality(dto.nationality());
-
-        service.update(author);
-
-        return ResponseEntity.noContent().build();
     }
 
 }

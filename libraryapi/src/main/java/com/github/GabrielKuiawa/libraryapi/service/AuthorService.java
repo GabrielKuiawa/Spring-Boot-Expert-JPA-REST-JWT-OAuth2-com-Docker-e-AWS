@@ -1,7 +1,9 @@
 package com.github.GabrielKuiawa.libraryapi.service;
 
+import com.github.GabrielKuiawa.libraryapi.exceptions.OperationNotPermittedException;
 import com.github.GabrielKuiawa.libraryapi.model.Author;
 import com.github.GabrielKuiawa.libraryapi.repository.AuthorRepository;
+import com.github.GabrielKuiawa.libraryapi.repository.BookRepository;
 import com.github.GabrielKuiawa.libraryapi.validator.AuthorValidator;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,15 @@ public class AuthorService {
 
     private final AuthorRepository repository;
     private final AuthorValidator validator;
+    private final BookRepository bookRepository;
 
-    public  AuthorService(AuthorRepository repository, AuthorValidator validator) {
+    public  AuthorService(
+            AuthorRepository repository,
+            AuthorValidator validator,
+            BookRepository bookRepository) {
         this.repository = repository;
         this.validator = validator;
+        this.bookRepository = bookRepository;
     }
 
     public Author save(Author author) {
@@ -38,6 +45,10 @@ public class AuthorService {
     }
 
     public void delete(Author author) {
+        if (authorHasABook(author)) {
+            throw  new OperationNotPermittedException(
+                    "It is not permitted to exclude an author who has registered books!");
+        }
         repository.delete(author);
     }
 
@@ -55,5 +66,9 @@ public class AuthorService {
         }
 
         return repository.findAll();
+    }
+
+    public boolean authorHasABook(Author author) {
+        return bookRepository.existsByAuthor(author);
     }
 }
