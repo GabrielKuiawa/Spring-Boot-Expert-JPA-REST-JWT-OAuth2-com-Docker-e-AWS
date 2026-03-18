@@ -1,7 +1,10 @@
 package com.github.GabrielKuiawa.libraryapi.controller.commom;
 
 import com.github.GabrielKuiawa.libraryapi.controller.dto.ResponseError;
+import com.github.GabrielKuiawa.libraryapi.exceptions.DuplicateRegisterException;
+import com.github.GabrielKuiawa.libraryapi.exceptions.OperationNotPermittedException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,5 +30,26 @@ public class GlobalExceptionHandler {
                 HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 "Error validate.",
                 listErrors);
+    }
+
+    @ExceptionHandler(DuplicateRegisterException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseError handleDuplicateRegisterException(DuplicateRegisterException e) {
+        return ResponseError.conflict(e.getMessage());
+    }
+
+    @ExceptionHandler(OperationNotPermittedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError handleOperationNotPermittedException(OperationNotPermittedException e) {
+        return ResponseError.defaultResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseError handleErrors(RuntimeException e) {
+        return new ResponseError(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "An unexpected error occurred. Please contact the administration.",
+                List.of());
     }
 }
