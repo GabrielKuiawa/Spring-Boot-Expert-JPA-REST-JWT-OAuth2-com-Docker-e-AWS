@@ -1,6 +1,7 @@
 package com.github.GabrielKuiawa.libraryapi.controller;
 
 import com.github.GabrielKuiawa.libraryapi.controller.dto.BookRegistrationDTO;
+import com.github.GabrielKuiawa.libraryapi.controller.dto.BookSearchResponseDTO;
 import com.github.GabrielKuiawa.libraryapi.controller.dto.ResponseError;
 import com.github.GabrielKuiawa.libraryapi.controller.mappers.BookMapper;
 import com.github.GabrielKuiawa.libraryapi.exceptions.DuplicateRegisterException;
@@ -9,10 +10,9 @@ import com.github.GabrielKuiawa.libraryapi.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("books")
@@ -30,4 +30,14 @@ public class BookController implements GenericController {
         return ResponseEntity.created(url).build();
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<BookSearchResponseDTO> getDetails(
+            @PathVariable String id
+    ) {
+        return service.getById(UUID.fromString(id))
+                .map(book -> {
+                    var dto = mapper.toDTO(book);
+                    return ResponseEntity.ok(dto);
+                }).orElseGet( () -> ResponseEntity.notFound().build());
+    }
 }
