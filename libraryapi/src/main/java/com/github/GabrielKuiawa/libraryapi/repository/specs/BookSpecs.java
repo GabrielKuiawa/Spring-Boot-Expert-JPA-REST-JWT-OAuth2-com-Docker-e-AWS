@@ -25,4 +25,12 @@ public class BookSpecs {
                 query,
                 cb) -> cb.equal(root.get("genre"),genre);
     }
+
+    public static Specification<Book> publicationYearEqual(Integer year) {
+        return (root,
+                query,
+                cb) ->
+                cb.equal(cb.function("to_char", String.class,
+                        root.get("publicationDate"),cb.literal("YYYY")), year.toString());
+    }
 }
