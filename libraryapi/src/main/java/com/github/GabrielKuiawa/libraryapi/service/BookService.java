@@ -64,6 +64,10 @@ public class BookService {
         if (publicationYear != null) {
             specs = specs.and(publicationYearEqual(publicationYear));
         }
+
+        if (authorName != null) {
+            specs = specs.and(authorLike(authorName));
+        }
         return repository.findAll(specs);
     }
 }
