@@ -3,6 +3,7 @@ package com.github.GabrielKuiawa.libraryapi.service;
 import com.github.GabrielKuiawa.libraryapi.model.Book;
 import com.github.GabrielKuiawa.libraryapi.model.GenreBook;
 import com.github.GabrielKuiawa.libraryapi.repository.BookRepository;
+import com.github.GabrielKuiawa.libraryapi.repository.specs.BookSpecs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,33 @@ public class BookService {
 
     public List<Book> search(
             String isbn,
+            String title,
             String authorName,
             GenreBook genre,
             Integer publicationYear
     ) {
-        Specification<Book> specs = null;
+//        Specification<Book> specs = Specification
+//                .where(BookSpecs.isbnEqual(isbn))
+//                .and(BookSpecs.titleLike(title))
+//                .and(BookSpecs.genreEqual(genre));
+
+        Specification<Book> specs = Specification
+                .where((root,
+                        query,
+                        cb) ->  cb.conjunction());
+
+        if (isbn != null) {
+            specs = specs.and(BookSpecs.isbnEqual(isbn));
+        }
+
+        if (title != null) {
+            specs = specs.and(BookSpecs.titleLike(title));
+        }
+
+        if (genre != null) {
+            specs = specs.and(BookSpecs.genreEqual(genre));
+        }
+
         return repository.findAll(specs);
     }
 }
