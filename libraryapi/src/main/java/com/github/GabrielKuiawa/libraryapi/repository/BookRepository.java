@@ -3,6 +3,8 @@ package com.github.GabrielKuiawa.libraryapi.repository;
 import com.github.GabrielKuiawa.libraryapi.model.Author;
 import com.github.GabrielKuiawa.libraryapi.model.Book;
 import com.github.GabrielKuiawa.libraryapi.model.GenreBook;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,6 +19,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificationExecutor<Book> {
+
+    Page<Book> findByAuthor(Author author, Pageable pageable);
 
     // Query Method
     List<Book> findByAuthor(Author author);
