@@ -2,6 +2,7 @@ package com.github.GabrielKuiawa.libraryapi.controller.commom;
 
 import com.github.GabrielKuiawa.libraryapi.controller.dto.ResponseError;
 import com.github.GabrielKuiawa.libraryapi.exceptions.DuplicateRegisterException;
+import com.github.GabrielKuiawa.libraryapi.exceptions.InvalidFieldException;
 import com.github.GabrielKuiawa.libraryapi.exceptions.OperationNotPermittedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,16 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseError handleOperationNotPermittedException(OperationNotPermittedException e) {
         return ResponseError.defaultResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidFieldException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ResponseError handleInvalidFieldException(InvalidFieldException e) {
+        return new ResponseError(
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Error validate.",
+                List.of(new com.github.GabrielKuiawa.libraryapi.controller.dto.
+                        FieldError(e.getField(),e.getMessage())));
     }
 
     @ExceptionHandler(RuntimeException.class)
