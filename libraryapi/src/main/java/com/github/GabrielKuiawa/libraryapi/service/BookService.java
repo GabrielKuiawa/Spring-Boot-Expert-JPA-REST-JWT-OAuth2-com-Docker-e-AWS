@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.GabrielKuiawa.libraryapi.repository.specs.BookSpecs.*;
+
 @Service
 @RequiredArgsConstructor
 public class BookService {
@@ -48,15 +50,15 @@ public class BookService {
                         cb) ->  cb.conjunction());
 
         if (isbn != null) {
-            specs = specs.and(BookSpecs.isbnEqual(isbn));
+            specs = specs.and(isbnEqual(isbn));
         }
 
         if (title != null) {
-            specs = specs.and(BookSpecs.titleLike(title));
+            specs = specs.and(titleLike(title));
         }
 
         if (genre != null) {
-            specs = specs.and(BookSpecs.genreEqual(genre));
+            specs = specs.and(genreEqual(genre));
         }
 
         return repository.findAll(specs);
