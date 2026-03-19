@@ -4,6 +4,7 @@ import com.github.GabrielKuiawa.libraryapi.model.Book;
 import com.github.GabrielKuiawa.libraryapi.model.GenreBook;
 import com.github.GabrielKuiawa.libraryapi.repository.BookRepository;
 import com.github.GabrielKuiawa.libraryapi.repository.specs.BookSpecs;
+import com.github.GabrielKuiawa.libraryapi.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,10 @@ import static com.github.GabrielKuiawa.libraryapi.repository.specs.BookSpecs.*;
 public class BookService {
 
     private final BookRepository repository;
+    private final BookValidator validator;
 
     public Book save(Book book) {
+        validator.validate(book);
         return repository.save(book);
     }
 
@@ -75,6 +78,7 @@ public class BookService {
         if (book.getId() == null) {
             throw new IllegalArgumentException("Required ID");
         }
+        validator.validate(book);
         repository.save(book);
     }
 }
