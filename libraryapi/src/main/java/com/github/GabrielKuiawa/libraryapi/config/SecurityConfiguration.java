@@ -1,5 +1,7 @@
 package com.github.GabrielKuiawa.libraryapi.config;
 
+import com.github.GabrielKuiawa.libraryapi.security.CustomUserDetailsService;
+import com.github.GabrielKuiawa.libraryapi.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -42,18 +44,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails user1 = User.builder()
-                .username("user1")
-                .password(encoder.encode("123"))
-                .roles("USER")
-                .build();
-
-        UserDetails user2 = User.builder()
-                .username("admin")
-                .password(encoder.encode("123"))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user1,user2);
+    public UserDetailsService userDetailsService(UserService userService) {
+        return  new CustomUserDetailsService(userService);
     }
 }
