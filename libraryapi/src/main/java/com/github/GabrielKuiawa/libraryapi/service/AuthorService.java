@@ -2,8 +2,10 @@ package com.github.GabrielKuiawa.libraryapi.service;
 
 import com.github.GabrielKuiawa.libraryapi.exceptions.OperationNotPermittedException;
 import com.github.GabrielKuiawa.libraryapi.model.Author;
+import com.github.GabrielKuiawa.libraryapi.model.User;
 import com.github.GabrielKuiawa.libraryapi.repository.AuthorRepository;
 import com.github.GabrielKuiawa.libraryapi.repository.BookRepository;
+import com.github.GabrielKuiawa.libraryapi.security.SecurityService;
 import com.github.GabrielKuiawa.libraryapi.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -21,9 +23,12 @@ public class AuthorService {
     private final AuthorRepository repository;
     private final AuthorValidator validator;
     private final BookRepository bookRepository;
+    private final SecurityService securityService;
 
     public Author save(Author author) {
         validator.validate(author);
+        User user = securityService.getUerLogin();
+        author.setUser(user);
         return repository.save(author);
     }
 

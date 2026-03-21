@@ -2,8 +2,10 @@ package com.github.GabrielKuiawa.libraryapi.service;
 
 import com.github.GabrielKuiawa.libraryapi.model.Book;
 import com.github.GabrielKuiawa.libraryapi.model.GenreBook;
+import com.github.GabrielKuiawa.libraryapi.model.User;
 import com.github.GabrielKuiawa.libraryapi.repository.BookRepository;
 import com.github.GabrielKuiawa.libraryapi.repository.specs.BookSpecs;
+import com.github.GabrielKuiawa.libraryapi.security.SecurityService;
 import com.github.GabrielKuiawa.libraryapi.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,9 +26,12 @@ public class BookService {
 
     private final BookRepository repository;
     private final BookValidator validator;
+    private final SecurityService securityService;
 
     public Book save(Book book) {
         validator.validate(book);
+        User user = securityService.getUerLogin();
+        book.setUser(user);
         return repository.save(book);
     }
 
