@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class BookController implements GenericController {
     private final BookService service;
     private final BookMapper mapper;
 
+    @PreAuthorize("hasAnyRole('MANAGER','OPERATOR')")
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody @Valid BookRegistrationDTO dto) {
         Book book = mapper.toEntity(dto);
@@ -35,6 +37,7 @@ public class BookController implements GenericController {
         return ResponseEntity.created(url).build();
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','OPERATOR')")
     @GetMapping("{id}")
     public ResponseEntity<BookSearchResponseDTO> getDetails(
             @PathVariable String id
@@ -46,6 +49,7 @@ public class BookController implements GenericController {
                 }).orElseGet( () -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','OPERATOR')")
     @DeleteMapping("{id}")
     public ResponseEntity<Object> delete(@PathVariable String id) {
         return service.getById(UUID.fromString(id))
@@ -55,6 +59,7 @@ public class BookController implements GenericController {
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','OPERATOR')")
     @GetMapping
     public ResponseEntity<Page<BookSearchResponseDTO>> search(
             @RequestParam(value = "isbn", required = false)
@@ -80,6 +85,7 @@ public class BookController implements GenericController {
         return ResponseEntity.ok(result);
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','OPERATOR')")
     @PutMapping("{id}")
     public ResponseEntity<Object> update(
             @PathVariable String id,@RequestBody @Valid BookRegistrationDTO dto) {

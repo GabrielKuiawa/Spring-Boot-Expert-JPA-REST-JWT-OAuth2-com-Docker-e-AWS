@@ -6,6 +6,7 @@ import com.github.GabrielKuiawa.libraryapi.exceptions.InvalidFieldException;
 import com.github.GabrielKuiawa.libraryapi.exceptions.OperationNotPermittedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,6 +54,13 @@ public class GlobalExceptionHandler {
                 "Error validate.",
                 List.of(new com.github.GabrielKuiawa.libraryapi.controller.dto.
                         FieldError(e.getField(),e.getMessage())));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseError handleAccessDeniedException(AccessDeniedException e) {
+        return new ResponseError(
+                HttpStatus.FORBIDDEN.value(), "Access denied", List.of() );
     }
 
     @ExceptionHandler(RuntimeException.class)

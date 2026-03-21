@@ -10,6 +10,7 @@ import com.github.GabrielKuiawa.libraryapi.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,6 +28,7 @@ public class AuthorController implements GenericController {
     private final AuthorService service;
     private final AuthorMapper mapper;
 
+    @PreAuthorize("hasRole('MANAGER')")
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody @Valid AuthorDTO dto) {
         Author author = mapper.toEntity(dto);
@@ -35,6 +37,7 @@ public class AuthorController implements GenericController {
         return ResponseEntity.created(location).build();
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','OPERATOR')")
     @GetMapping("{id}")
     public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable String id) {
         var idAuthor = UUID.fromString(id);
@@ -46,6 +49,7 @@ public class AuthorController implements GenericController {
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         var idAuthor = UUID.fromString(id);
@@ -59,6 +63,7 @@ public class AuthorController implements GenericController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','OPERATOR')")
     @GetMapping
     public ResponseEntity<List<AuthorDTO>> search(
             @RequestParam(value = "name", required = false) String name,
@@ -71,6 +76,7 @@ public class AuthorController implements GenericController {
         return ResponseEntity.ok(list);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @PutMapping("{id}")
     public ResponseEntity<Void> update(
             @PathVariable String id, @RequestBody @Valid AuthorDTO dto) {
