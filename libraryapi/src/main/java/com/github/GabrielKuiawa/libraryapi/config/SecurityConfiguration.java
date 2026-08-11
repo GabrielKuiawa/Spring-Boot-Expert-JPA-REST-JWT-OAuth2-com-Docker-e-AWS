@@ -1,6 +1,7 @@
 package com.github.GabrielKuiawa.libraryapi.config;
 
 import com.github.GabrielKuiawa.libraryapi.security.CustomUserDetailsService;
+import com.github.GabrielKuiawa.libraryapi.security.LoginSocialSuccessHandler;
 import com.github.GabrielKuiawa.libraryapi.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +26,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSocialSuccessHandler successHandler) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
@@ -38,7 +39,9 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.POST,"/users/**").permitAll();
                     authorize.anyRequest().authenticated();
                 } )
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(aouth2 -> {
+                    aouth2.successHandler(successHandler);
+                })
                 .build();
     }
 
